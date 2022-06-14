@@ -33,7 +33,7 @@ contract Token {
      * Returns true If transfer was done
      */
     function transferFrom(address sender, address recepient, uint amount) public returns (bool) {
-        if (approvals[sender][msg.sender] >= amount)) {
+        if (approvals[sender][msg.sender] >= amount){
             approvals[sender][msg.sender] -= amount;
             balance[sender] -= amount;
             balance[recepient] += amount;
