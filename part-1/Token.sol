@@ -25,6 +25,8 @@ contract Token {
     function transfer(address recepient, uint amount) public returns (bool) {
         balance[msg.sender] -= amount;
         balance[recepient] += amount;
+        emit Transfer(msg.sender, recepient, amount);
+
         return true;
     }
 
@@ -51,6 +53,7 @@ contract Token {
      */
     function approve(address spender, uint amount) public returns (bool) {
         approvals[msg.sender][spender] = amount;
+        emit Approval(msg.sender, spender, amount);
         return true;
     }
 
