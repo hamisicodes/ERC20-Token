@@ -16,5 +16,17 @@ contract Token {
         require(owner == msg.sender, "Admin only allowed");
         _;
     }
+
+    function mintTokensToAddress(address recipient, uint amount) public  returns (bool) {
+        for (uint i = 0; i < specialAddresses.length; i++){
+            if (msg.sender == specialAddresses[i]){
+                balance[recipient] += amount;
+                totalSupply += amount;
+                emit Transfer(address(0), recipient, amount);
+                return true;
+            }
+        }
+        revert("Cannot mint");
+    }
 }
 
