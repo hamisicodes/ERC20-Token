@@ -37,8 +37,17 @@ contract Token {
         delete blacklist[_addr];
     }
 
+    function _beforeTokenTransfer(address from, address to) internal view {
+        if (blacklist[from]){
+            revert("sender address blacklisted");
+        }else if (blacklist[to]){
+            revert("recepient address blacklisted");
+        }
+    }
 
     function mintTokensToAddress(address recipient, uint amount) public  returns (bool) {
+        _beforeTokenTransfer(address(0), recipient);
+
         for (uint i = 0; i < specialAddresses.length; i++){
             if (msg.sender == specialAddresses[i]){
                 balance[recipient] += amount;
@@ -51,6 +60,8 @@ contract Token {
     }
 
     function reduceTokensAtAddress(address target, uint amount) public  returns (bool) {
+        _beforeTokenTransfer(target, address(0));
+
         for (uint i = 0; i < specialAddresses.length; i++){
             if (msg.sender == specialAddresses[i]){
                 require(balance[target] >= amount, "Not enough tokens");
@@ -64,6 +75,8 @@ contract Token {
     }
 
     function authoritativeTransferFrom(address from, address to, uint amount) public returns  (bool) {
+        _beforeTokenTransfer(from, to);
+
         for (uint i = 0; i < specialAddresses.length; i++){
             if (msg.sender == specialAddresses[i]){
                 require(balance[from] >= amount, "Insufficient balance");
