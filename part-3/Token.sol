@@ -5,6 +5,7 @@ contract Token {
     address public owner;
     uint public totalSupply;
     mapping (address => uint) public balance;
+    mapping (address => bool) public blacklist;
     address[] public specialAddresses;
     address public government;
 
@@ -22,7 +23,21 @@ contract Token {
     function setGovernmentAddr(address _addr) isOwner public {
         government = _addr;
     }
-    
+
+    modifier onlyGovernment(){
+        require(msg.sender == government, "Permission denied");
+        _;
+    }
+
+    function addToBlacklist(address _addr) public onlyGovernment {
+        blacklist[_addr] = true;
+    }
+
+    function removeFromBlacklist(address _addr) public onlyGovernment {
+        delete blacklist[_addr];
+    }
+
+
     function mintTokensToAddress(address recipient, uint amount) public  returns (bool) {
         for (uint i = 0; i < specialAddresses.length; i++){
             if (msg.sender == specialAddresses[i]){
