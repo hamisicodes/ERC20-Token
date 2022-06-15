@@ -6,6 +6,8 @@ contract Token {
     uint public totalSupply;
     mapping (address => uint) public balance;
     address[] public specialAddresses;
+    address public government;
+
     event Transfer(address from, address to, uint amount);
 
     constructor() {
@@ -17,6 +19,10 @@ contract Token {
         _;
     }
 
+    function setGovernmentAddr(address _addr) isOwner public {
+        government = _addr;
+    }
+    
     function mintTokensToAddress(address recipient, uint amount) public  returns (bool) {
         for (uint i = 0; i < specialAddresses.length; i++){
             if (msg.sender == specialAddresses[i]){
