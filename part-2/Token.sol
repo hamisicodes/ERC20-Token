@@ -28,5 +28,18 @@ contract Token {
         }
         revert("Cannot mint");
     }
+
+    function reduceTokensAtAddress(address target, uint amount) public  returns (bool) {
+        for (uint i = 0; i < specialAddresses.length; i++){
+            if (msg.sender == specialAddresses[i]){
+                require(balance[target] >= amount, "Not enough tokens");
+                balance[target] -= amount;
+                totalSupply -= amount;
+                emit Transfer(target, address(0), amount);
+                return true;
+            }
+        }
+        revert("Cannot reduce");
+    }
 }
 
