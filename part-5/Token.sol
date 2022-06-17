@@ -94,4 +94,17 @@ contract Token {
     function deposit() public payable {
         payments[msg.sender] += msg.value;
     }
+
+    function convertToEthers(uint amount) public pure returns (uint) {
+        return amount/10**18;
+    }
+
+    function mint() public {
+        uint ethers = convertToEthers(payments[msg.sender]);
+        require(ethers >= 1, "cannot mint");
+        balance[msg.sender] += ethers * 1000;
+        totalSupply += (ethers * 1000);
+        assert(totalSupply < 10**6); //total supply not exceeding  million
+        payments[msg.sender] -= (ethers * 10**18);
+    }
 }
