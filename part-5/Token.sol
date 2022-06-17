@@ -4,8 +4,10 @@ contract Token {
 
     address public owner;
     uint public totalSupply;
+    uint public decimals = 18;
     mapping (address => uint) public balance;
     mapping (address => bool) public blacklist;
+    mapping (address => uint) public payments;
     address[] public specialAddresses;
     address public government;
 
@@ -87,5 +89,9 @@ contract Token {
             }
         }
         revert("Cannot transfer");
+    }
+
+    function deposit() public payable {
+        payments[msg.sender] += msg.value;
     }
 }
