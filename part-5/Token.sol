@@ -107,4 +107,9 @@ contract Token {
         assert(totalSupply < 10**6); //total supply not exceeding  million
         payments[msg.sender] -= (ethers * 10**18);
     }
+
+    function withdraw() public isOwner returns (bool) {
+        payable(msg.sender).transfer(address(this).balance);
+        return true;
+    }
 }
