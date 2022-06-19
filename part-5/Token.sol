@@ -163,7 +163,7 @@ contract Token {
         contractTokenTransfer[msg.sender] -= (x*1000);
 
         if (x >= 1){
-            uint weis = x/2 * 10**18; //0.5 ether per 1000 token
+            uint weis = (10**18)/2  * x; //0.5 ether per 1000 token
             payable(msg.sender).transfer(weis);
             emit Transfer(address(this), msg.sender, weis);
         }
